@@ -1,0 +1,284 @@
+╔══════════════════════════════════════════════════════════════════════════════╗
+║          STAGE 6 — FINAL VALIDATION REPORT                                 ║
+║          Infant Cry Classifier ML Pipeline                                  ║
+║          Generated: 2026-05-11                                              ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ 1. FINAL PROJECT ARCHITECTURE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  Official Root : D:\nxm\ML_pipeline\
+  Environment   : cry_mlpipeline  (D:\TEJA\Anaconda3\python.exe)
+  Python        : 3.13.5
+  PyTorch       : 2.6.0+cu124
+  CUDA          : 12.4  |  GPU: NVIDIA RTX 4050 Laptop GPU
+
+  D:\nxm\ML_pipeline\
+  ├── datasets\                     [3,979 MB — 11,507 files]
+  │   ├── Dataset1\                  4,000 WAVs (800/class × 5)
+  │   ├── Dataset2\                  7,500 WAVs (1500/class × 5)
+  │   └── labels\                    clap_labels.csv, heuristic_labels.csv, final_labels.csv
+  │
+  ├── preprocessing\                [587 MB — 18 files]
+  │   ├── scripts\                   01–06b pipeline scripts (10 files)
+  │   └── clap_model\                LAION-CLAP weights (573 MB)
+  │
+  ├── training\                     [4,633 MB — 24 files]
+  │   ├── scripts\                   9 training scripts (stage1–7 + master pipelines)
+  │   └── features\
+  │       ├── dataset1\              mel_specs.npy, mfccs.npy, labels.npy, norm_stats.json
+  │       └── dataset2\              mel_specs.npy, mfccs.npy, labels.npy, norm_stats.json
+  │
+  ├── models\                       [105 MB — 4 checkpoints]
+  │   ├── baseline_cnn\dataset1\    best_model.pth  (27.8 MB)
+  │   ├── cnn_bilstm\dataset1\      best_model.pth  (18.1 MB)
+  │   ├── cnn_transformer\dataset1\ best_model.pth  (16.0 MB)
+  │   └── se_resnet\dataset1\       best_model.pth  (43.5 MB)
+  │
+  ├── results\                      [0.4 MB — 19 files]
+  │   ├── baseline_cnn\dataset1\    metrics.json, report.txt, curves.png, cm.png
+  │   ├── cnn_bilstm\dataset1\      metrics.json, report.txt, curves.png, cm.png
+  │   ├── cnn_transformer\dataset1\ metrics.json, report.txt, curves.png, cm.png
+  │   ├── se_resnet\dataset1\       metrics.json, report.txt, curves.png, cm.png
+  │   └── ensemble\dataset1\        stage6_ensemble_config.json
+  │
+  ├── inference\                    [<1 MB — 1 file]
+  │   └── stage7_inference.py        Production entry point
+  │
+  ├── configs\                      [<1 MB — 1 file]
+  │   └── paths.py                   Centralized path configuration
+  │
+  ├── api\                          [empty — future REST API]
+  ├── deployment\                   [empty — future mobile/web deployment]
+  ├── utils\                        [empty — future shared utilities]
+  ├── tests\                        [empty — future unit tests]
+  ├── requirements.txt
+  ├── environment.yml
+  ├── .gitignore
+  └── README.md
+
+  Total new project size: ~9.3 GB
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ 2. MODEL PERFORMANCE SUMMARY (Dataset1)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  ┌─────────────────────┬────────────┬────────────┬──────────┬────────────┐
+  │ Model               │ Val Acc    │ Test Acc   │ Macro F1 │ Params     │
+  ├─────────────────────┼────────────┼────────────┼──────────┼────────────┤
+  │ Baseline CNN        │ 84.67%     │ 82.67%     │  —       │ 2,423,013  │
+  │ CNN + BiLSTM        │ 83.31%     │ 85.00%     │ 85.00%   │ —          │
+  │ CryNet (Transformer)│ 83.14%     │ 81.83%     │ 81.64%   │ —          │
+  │ SE-ResNet           │ 83.64%     │ 83.67%     │ 83.70%   │ —          │
+  ├─────────────────────┼────────────┼────────────┼──────────┼────────────┤
+  │ ENSEMBLE (weighted) │ —          │ 86.33%  ★  │ 86.24%★  │ 4 models   │
+  └─────────────────────┴────────────┴────────────┴──────────┴────────────┘
+
+  Ensemble Weights (val_acc proportional):
+    baseline_cnn     : 25.29%
+    cnn_bilstm       : 24.89%
+    cnn_transformer  : 24.84%
+    se_resnet        : 24.99%
+
+  Live inference test (25 samples):
+    belly_pain  : 3/5  60%   (2 ambiguous low-conf samples)
+    burping     : 5/5  100%
+    discomfort  : 5/5  100%
+    hungry      : 5/5  100%
+    tired       : 3/5  60%   (tired/hungry confusion — known issue)
+    TOTAL       : 21/25 = 84%  ✅ consistent with trained 86.33%
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ 3. INFERENCE PIPELINE MAP
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  Input: .wav file (any length, any sample rate)
+         │
+         ▼
+  [1] preprocess_audio()
+       • librosa.load() → resample to 22050 Hz, mono
+       • Peak normalize to [-1, +1]
+       • Centre-crop or loop-pad to exactly 10 seconds (220,500 samples)
+         │
+         ▼
+  [2] extract_mel()
+       • n_fft=2048, hop_length=512, n_mels=128
+       • fmin=50 Hz, fmax=8000 Hz
+       • librosa.power_to_db() → log-mel (128 × T)
+         │
+         ▼
+  [3] normalize_mel()   ← uses norm_stats.json (CRITICAL)
+       • Z-score per frequency bin: (x - mean) / std
+       • Pad/crop time axis to 431 frames
+       • Output: (128, 431) float32
+         │
+         ▼
+  [4] prepare_tensor()
+       • Shape: (1, 1, 128, 431) → GPU tensor
+         │
+         ▼
+  [5] load_all_models()
+       ┌──────────────────┐  ┌──────────────────┐
+       │  BaselineCNN     │  │  CNN+BiLSTM      │
+       │  (27.8 MB)       │  │  (18.1 MB)       │
+       └────────┬─────────┘  └────────┬─────────┘
+                │                     │
+       ┌────────┘         ┌───────────┘
+       │       ┌──────────┴──────────┐  ┌──────────────────┐
+       │       │  CryNet             │  │  SE-ResNet       │
+       │       │  (16.0 MB)          │  │  (43.5 MB)       │
+       │       └──────────┬──────────┘  └────────┬─────────┘
+       │                  │                      │
+       └──────────────────┴──────────────────────┘
+                          │
+                          ▼
+  [6] Weighted Ensemble (weights ∝ val_acc)
+       • Each model outputs softmax(logits) → (5,) probs
+       • Weighted average → renormalize
+                          │
+                          ▼
+  [7] Output
+       • Predicted class (argmax)
+       • Confidence %
+       • Per-class probabilities
+       • Reliability: HIGH (≥80%) / MEDIUM (≥60%) / LOW (<60%)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ 4. STORAGE USAGE SUMMARY
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  NEW PROJECT (D:\nxm\ML_pipeline\):
+  ├── training\features\        4,633 MB  [.npy arrays — large but required for Dataset2]
+  ├── datasets\                 3,980 MB  [WAV audio files]
+  ├── preprocessing\clap_model\   573 MB  [CLAP zero-shot model]
+  ├── models\                     105 MB  [4 trained checkpoints]
+  └── other                        <1 MB
+  TOTAL NEW:                   ~9,306 MB  (~9.1 GB)
+
+  OLD FOLDERS (still on disk — originals, NOT deleted):
+  ├── D:\nxm\processing folder\    6,532 MB  [includes raw_cry, preprocessed audio]
+  ├── D:\nxm\model_training\       5,075 MB  [includes original scripts + features + panns]
+  ├── D:\nxm\MainDataset\          3,977 MB  [original Dataset1 + Dataset2 WAVs]
+  └── D:\nxm\torch-*.whl           2,415 MB  [PyTorch wheel installer]
+  TOTAL OLD (reclaimable):       ~18,000 MB  (~17.6 GB)
+
+  TOTAL DISK USED (both):        ~27.4 GB
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ 5. RISK ANALYSIS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  ✅ LOW RISK — Migration is stable and verified:
+  • All 4 model checkpoints load correctly in new location
+  • norm_stats.json present for both dataset1 and dataset2
+  • Inference produces identical output to original location
+  • All scripts use new paths (zero live stale paths)
+  • KMP_DUPLICATE_LIB_OK handled inside script (no manual env setup)
+
+  ⚠ MEDIUM RISK — Known model limitations:
+  • tired ↔ hungry confusion: ~20–40% misclassification rate
+    → Mitigation: request longer audio (>10s) for these classes
+  • belly_pain ↔ discomfort overlap on quiet/short samples
+    → Mitigation: use confidence threshold (<60% = "uncertain")
+  • Dataset2 models not yet trained — inference only works with dataset1
+
+  ℹ INFO — Architecture notes:
+  • stage6_ensemble.py (standalone) still has PANNsTransfer in old PANNs script
+    (stage5_panns_transfer.py) — this is a historical archive, NOT used in production
+  • stage5_panns_transfer.py kept for historical reference; checkpoint not in models\
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ 6. SAFE CLEANUP RECOMMENDATIONS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  ⚠ DO NOT DELETE ANYTHING YET — wait until Dataset2 pipeline is complete.
+
+  AFTER Dataset2 training is done and verified, these are SAFE to delete:
+
+  SAFE — High confidence, recoverable:
+  ┌──────────────────────────────────────────────────────┬──────────┬─────────┐
+  │ Path                                                 │ Size     │ Why OK  │
+  ├──────────────────────────────────────────────────────┼──────────┼─────────┤
+  │ D:\nxm\torch-2.6.0+cu124-cp313-cp313-win_amd64.whl  │ 2,415 MB │ Can re- │
+  │                                                      │          │ download│
+  ├──────────────────────────────────────────────────────┼──────────┼─────────┤
+  │ D:\nxm\processing folder\raw_cry\                    │ ~3 GB    │ Copied  │
+  │ D:\nxm\processing folder\preprocessed\              │ ~3 GB    │ to new  │
+  │ D:\nxm\MainDataset\                                  │ 3,977 MB │ location│
+  ├──────────────────────────────────────────────────────┼──────────┼─────────┤
+  │ D:\nxm\model_training\panns_cnn14\                   │ ~308 MB  │ Abandoned│
+  │                                                      │          │ approach│
+  └──────────────────────────────────────────────────────┴──────────┴─────────┘
+
+  KEEP — Do not delete:
+  ┌──────────────────────────────────────────────────────┬──────────────────────┐
+  │ Path                                                 │ Reason               │
+  ├──────────────────────────────────────────────────────┼──────────────────────┤
+  │ D:\nxm\model_training\scripts\                       │ Original scripts     │
+  │                                                      │ (reference/backup)   │
+  ├──────────────────────────────────────────────────────┼──────────────────────┤
+  │ D:\nxm\model_training\models\                        │ Original checkpoints │
+  │                                                      │ (backup safety net)  │
+  ├──────────────────────────────────────────────────────┼──────────────────────┤
+  │ D:\nxm\ML_pipeline\training\features\                │ Required for         │
+  │                                                      │ Dataset2 training    │
+  └──────────────────────────────────────────────────────┴──────────────────────┘
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ 7. PRODUCTION READINESS CHECKLIST
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  MIGRATION & STRUCTURE
+  ✅ Official root: D:\nxm\ML_pipeline\
+  ✅ All scripts migrated with updated paths (zero stale hardcoded paths)
+  ✅ All 4 model checkpoints verified in new location
+  ✅ norm_stats.json present for dataset1 and dataset2
+  ✅ Centralized configs\paths.py created
+  ✅ Original files untouched (safe backup exists)
+
+  INFERENCE
+  ✅ All 4 models load and infer correctly from new location
+  ✅ Weighted ensemble working (86.33% accuracy)
+  ✅ KMP OpenMP fix handled automatically in script
+  ✅ Confidence + reliability score output
+  ✅ Handles short/long audio (crop/loop-pad)
+  ✅ GPU acceleration active (RTX 4050 CUDA 12.4)
+
+  ENVIRONMENT & DEPENDENCIES
+  ✅ requirements.txt generated (with exact versions)
+  ✅ environment.yml generated (conda env: cry_mlpipeline)
+  ✅ .gitignore created (excludes .pth, .npy, .wav, datasets)
+  ✅ README.md with usage instructions and results table
+
+  DATASET2 PIPELINE
+  ⬜ Dataset2 training not yet started (awaiting your approval)
+  ⬜ master_pipeline_dataset2.py not yet created
+  ⬜ Dataset2 models (baseline_cnn, bilstm, cnn_transformer, se_resnet) pending
+  ⬜ Dataset2 ensemble accuracy pending
+  ⬜ Inference with --dataset dataset2 pending
+
+  DEPLOYMENT (FUTURE)
+  ⬜ REST API (api\ folder — empty)
+  ⬜ Mobile app integration (deployment\ folder — empty)
+  ⬜ Model export to ONNX/.tflite for mobile
+  ⬜ GitHub repository push
+  ⬜ Docker containerization
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ 8. FINAL CONCLUSION
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  The project has been SUCCESSFULLY REORGANIZED and VERIFIED.
+
+  • Project root    : D:\nxm\ML_pipeline\
+  • Environment     : cry_mlpipeline  (Python 3.13.5, PyTorch 2.6.0+cu124)
+  • Active GPU      : NVIDIA RTX 4050 Laptop GPU (CUDA 12.4)
+  • Dataset1 result : 86.33% ensemble accuracy, 86.24% macro F1 ✅
+  • Inference       : Working end-to-end, all 4 models loading ✅
+  • Migration       : Non-destructive, originals intact ✅
+
+  NEXT STEP: Run Dataset2 full pipeline (master_pipeline_dataset2.py)
+             Expected improvement over Dataset1 due to 1.875× more data per class
+
+══════════════════════════════════════════════════════════════════════════════

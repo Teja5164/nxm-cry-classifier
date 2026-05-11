@@ -1,0 +1,81 @@
+# ── Python ────────────────────────────────────────────────────
+__pycache__/
+*.py[cod]
+*$py.class
+*.pyc
+
+# ── PyTorch model weights (large binary files) ────────────────
+*.pth
+*.pt
+*.onnx
+*.h5
+*.pkl
+*.joblib
+
+# ── Numpy feature arrays (very large) ─────────────────────────
+*.npy
+*.npz
+
+# ── Audio datasets (large, source-of-truth elsewhere) ─────────
+datasets/Dataset1/
+datasets/Dataset2/
+datasets/raw_cry/
+datasets/preprocessed/
+
+# ── CLAP model (downloaded separately) ────────────────────────
+preprocessing/clap_model/
+
+# ── Training artifacts ─────────────────────────────────────────
+training/features/
+
+# ── Models (committed separately or via DVC) ──────────────────
+models/
+
+# ── Results plots (regenerated) ───────────────────────────────
+results/**/*.png
+
+# ── Jupyter ───────────────────────────────────────────────────
+.ipynb_checkpoints/
+*.ipynb
+
+# ── VS Code ───────────────────────────────────────────────────
+.vscode/
+*.code-workspace
+
+# ── Environments ──────────────────────────────────────────────
+.env
+.venv/
+venv/
+env/
+
+# ── OS ────────────────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ── Temp / logs ───────────────────────────────────────────────
+*.log
+*.tmp
+temp/
+tmp/
+
+# ── Failure logs generated during preprocessing ───────────────
+datasets/labels/*_failures.json
+datasets/features/
+
+# ── Large binary model files ──────────────────────────────────
+*.bin
+
+# ── Git LFS placeholders (if using LFS for models) ────────────
+.lfsconfig
+
+# ── pytest / coverage ─────────────────────────────────────────
+.pytest_cache/
+htmlcov/
+.coverage
+*.cover
+
+# ── Build artifacts ───────────────────────────────────────────
+dist/
+build/
+*.egg-info/

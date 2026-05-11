@@ -1,0 +1,37 @@
+name: cry_mlpipeline
+channels:
+  - pytorch
+  - nvidia
+  - conda-forge
+  - defaults
+
+dependencies:
+  - python=3.13.5
+  - pip
+
+  # ── Conda packages ──────────────────────────────────────────
+  - numpy=2.1.3
+  - scipy=1.15.3
+  - scikit-learn=1.6.1
+  - matplotlib=3.10.0
+  - seaborn=0.13.2
+  - pandas=2.2.3
+  - tqdm=4.67.1
+
+  # ── Pip packages (PyTorch CUDA + audio) ─────────────────────
+  - pip:
+    - torch==2.6.0+cu124 --index-url https://download.pytorch.org/whl/cu124
+    - librosa==0.11.0
+    - soundfile==0.13.1
+
+# ============================================================
+# Usage:
+#   conda env create -f environment.yml
+#   conda activate cry_mlpipeline
+#
+# Update existing env:
+#   conda env update -f environment.yml --prune
+#
+# Export current env:
+#   conda env export > environment.yml
+# ============================================================

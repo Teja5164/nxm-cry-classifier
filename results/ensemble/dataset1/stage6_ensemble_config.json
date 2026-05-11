@@ -1,0 +1,59 @@
+{
+  "dataset": "dataset1",
+  "ensemble": "weighted",
+  "models": [
+    {
+      "name": "baseline_cnn",
+      "val_acc": 0.8466666666666667,
+      "weight": 0.25292496334444914
+    },
+    {
+      "name": "cnn_bilstm",
+      "val_acc": 0.8330550918196995,
+      "weight": 0.2488587738926034
+    },
+    {
+      "name": "cnn_transformer",
+      "val_acc": 0.8313856427378965,
+      "weight": 0.24836005891486274
+    },
+    {
+      "name": "se_resnet",
+      "val_acc": 0.8363939899833055,
+      "weight": 0.24985620384808477
+    }
+  ],
+  "test_acc": 0.8633333333333333,
+  "macro_f1": 0.8623923412402936,
+  "weighted_f1": 0.8623923412402935,
+  "stage_metrics": {
+    "s2": {
+      "dataset": "dataset1",
+      "test_accuracy": 0.8267,
+      "best_val_accuracy": 0.8467,
+      "epochs_trained": 74,
+      "n_params": 2423013
+    },
+    "s3": {
+      "stage": "stage3_bilstm",
+      "val_acc": 0.8330550918196995,
+      "test_acc": 0.85,
+      "macro_f1": 0.8499297616908557,
+      "weighted_f1": 0.8499297616908557
+    },
+    "s4": {
+      "stage": "stage4_transformer",
+      "val_acc": 0.8313856427378965,
+      "test_acc": 0.8183333333333334,
+      "macro_f1": 0.8163698719419525,
+      "weighted_f1": 0.8163698719419525
+    },
+    "s5": {
+      "stage": "stage5_senet",
+      "val_acc": 0.8363939899833055,
+      "test_acc": 0.8366666666666667,
+      "macro_f1": 0.8369559112241877,
+      "weighted_f1": 0.8369559112241877
+    }
+  }
+}

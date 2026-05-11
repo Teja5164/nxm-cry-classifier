@@ -1,0 +1,30 @@
+{
+  "classes": ["belly_pain", "burping", "discomfort", "hungry", "tired"],
+  "class2idx": {
+    "belly_pain": 0,
+    "burping":    1,
+    "discomfort": 2,
+    "hungry":     3,
+    "tired":      4
+  },
+  "idx2class": {
+    "0": "belly_pain",
+    "1": "burping",
+    "2": "discomfort",
+    "3": "hungry",
+    "4": "tired"
+  },
+  "descriptions": {
+    "belly_pain": "Intense, high-pitched rhythmic cry — often signals tummy/gas pain",
+    "burping":    "Short, sporadic cry with pauses — baby likely needs to be burped",
+    "discomfort": "Moderate-intensity whining cry — environmental discomfort (wet, cold, hot)",
+    "hungry":     "Rhythmic, building-intensity cry — feeding needed",
+    "tired":      "Weak, whimpering, low-energy cry — baby needs sleep"
+  },
+  "n_classes": 5,
+  "confusion_pairs": [
+    ["belly_pain", "discomfort"],
+    ["tired", "hungry"]
+  ],
+  "note": "belly_pain/discomfort and tired/hungry share acoustic features — low-confidence predictions between these pairs are expected."
+}

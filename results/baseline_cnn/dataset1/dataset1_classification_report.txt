@@ -1,0 +1,15 @@
+Dataset: dataset1
+Test Accuracy: 0.8267
+Best Val Accuracy: 0.8467
+
+              precision    recall  f1-score   support
+
+  belly_pain     0.7789    0.6167    0.6884       120
+     burping     0.8203    0.8750    0.8468       120
+  discomfort     0.9274    0.9583    0.9426       120
+      hungry     0.8033    0.8167    0.8099       120
+       tired     0.7939    0.8667    0.8287       120
+
+    accuracy                         0.8267       600
+   macro avg     0.8248    0.8267    0.8233       600
+weighted avg     0.8248    0.8267    0.8233       600

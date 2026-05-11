@@ -1,0 +1,28 @@
+version: "3.9"
+
+services:
+  cry-classifier:
+    build: ..
+    ports:
+      - "8000:8000"
+    environment:
+      - KMP_DUPLICATE_LIB_OK=TRUE
+    volumes:
+      # Mount model weights (excluded from Docker image)
+      - ../models:/app/models:ro
+      # Mount norm_stats and features
+      - ../training/features:/app/training/features:ro
+    # For GPU support (requires nvidia-container-toolkit):
+    # deploy:
+    #   resources:
+    #     reservations:
+    #       devices:
+    #         - driver: nvidia
+    #           count: 1
+    #           capabilities: [gpu]
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3

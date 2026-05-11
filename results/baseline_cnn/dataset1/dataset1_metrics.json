@@ -1,0 +1,7 @@
+{
+  "dataset": "dataset1",
+  "test_accuracy": 0.8267,
+  "best_val_accuracy": 0.8467,
+  "epochs_trained": 74,
+  "n_params": 2423013
+}
