@@ -31,6 +31,15 @@ TRAINING_SCRIPTS  = TRAINING_DIR / 'scripts'
 MODELS_DIR        = PROJECT_ROOT / 'models'
 RESULTS_DIR       = PROJECT_ROOT / 'results'
 
+# ── Calibration artifacts (Phase 4) ──────────────────────────────────────────
+CALIB_DIR         = MODELS_DIR / 'calibration'
+TEMPERATURE_JSON  = CALIB_DIR / 'temperature.json'
+WEIGHTS_JSON      = CALIB_DIR / 'ensemble_weights.json'
+
+# ── Binary cry gate model ─────────────────────────────────────────────────────
+CRY_GATE_DIR      = MODELS_DIR / 'cry_gate'
+CRY_GATE_MODEL    = CRY_GATE_DIR / 'best_model.pth'
+
 # ── Inference ────────────────────────────────────────────────────────────────
 INFERENCE_DIR     = PROJECT_ROOT / 'inference'
 

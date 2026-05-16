@@ -1,0 +1,81 @@
+{
+  "model": "CryNet*",
+  "dataset": "dataset1",
+  "val_accuracy": 81.75,
+  "log_loss": 0.505963,
+  "macro_precision": 0.82529,
+  "macro_recall": 0.8175,
+  "macro_f1": 0.816442,
+  "temperature": 0.974546,
+  "ensemble_weight": 0.341233,
+  "per_class": {
+    "belly_pain": {
+      "precision": 0.7692,
+      "recall": 0.625,
+      "f1": 0.6897,
+      "support": 160
+    },
+    "burping": {
+      "precision": 0.8873,
+      "recall": 0.7875,
+      "f1": 0.8344,
+      "support": 160
+    },
+    "discomfort": {
+      "precision": 0.9295,
+      "recall": 0.9062,
+      "f1": 0.9177,
+      "support": 160
+    },
+    "hungry": {
+      "precision": 0.6938,
+      "recall": 0.9062,
+      "f1": 0.7859,
+      "support": 160
+    },
+    "tired": {
+      "precision": 0.8466,
+      "recall": 0.8625,
+      "f1": 0.8545,
+      "support": 160
+    }
+  },
+  "confusion_matrix": [
+    [
+      100,
+      6,
+      3,
+      38,
+      13
+    ],
+    [
+      10,
+      126,
+      4,
+      8,
+      12
+    ],
+    [
+      1,
+      1,
+      145,
+      13,
+      0
+    ],
+    [
+      8,
+      3,
+      4,
+      145,
+      0
+    ],
+    [
+      11,
+      6,
+      0,
+      5,
+      138
+    ]
+  ],
+  "generated_at": "2026-05-16 23:46"
+}

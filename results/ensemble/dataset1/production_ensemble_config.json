@@ -1,0 +1,105 @@
+{
+  "dataset": "dataset1",
+  "pipeline_version": "v2.0",
+  "ensemble_strategy": "temperature_scaled_optimized_weights",
+  "val_accuracy": 87.5,
+  "macro_f1": 0.87402,
+  "log_loss": 0.413677,
+  "models": [
+    {
+      "name": "BaselineCNN*",
+      "temperature": 0.873054,
+      "weight": 0.137214,
+      "val_acc": 82.0
+    },
+    {
+      "name": "CNN+BiLSTM*",
+      "temperature": 0.937033,
+      "weight": 0.161504,
+      "val_acc": 79.625
+    },
+    {
+      "name": "CryNet*",
+      "temperature": 0.974546,
+      "weight": 0.341233,
+      "val_acc": 81.75
+    },
+    {
+      "name": "SE-ResNet*",
+      "temperature": 1.036756,
+      "weight": 0.360049,
+      "val_acc": 85.375
+    }
+  ],
+  "per_class": {
+    "belly_pain": {
+      "precision": 0.8643,
+      "recall": 0.7562,
+      "f1": 0.8067,
+      "support": 160
+    },
+    "burping": {
+      "precision": 0.9225,
+      "recall": 0.8187,
+      "f1": 0.8675,
+      "support": 160
+    },
+    "discomfort": {
+      "precision": 0.9506,
+      "recall": 0.9625,
+      "f1": 0.9565,
+      "support": 160
+    },
+    "hungry": {
+      "precision": 0.8171,
+      "recall": 0.8938,
+      "f1": 0.8537,
+      "support": 160
+    },
+    "tired": {
+      "precision": 0.8343,
+      "recall": 0.9437,
+      "f1": 0.8856,
+      "support": 160
+    }
+  },
+  "confusion_matrix": [
+    [
+      121,
+      3,
+      2,
+      21,
+      13
+    ],
+    [
+      6,
+      131,
+      2,
+      6,
+      15
+    ],
+    [
+      2,
+      0,
+      154,
+      4,
+      0
+    ],
+    [
+      8,
+      3,
+      4,
+      143,
+      2
+    ],
+    [
+      3,
+      5,
+      0,
+      1,
+      151
+    ]
+  ],
+  "improvement_over_original": 1.17,
+  "generated_at": "2026-05-16 23:46"
+}

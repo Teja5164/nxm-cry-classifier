@@ -1,0 +1,15 @@
+Model: CryNet*  (augmented + T=0.9745)
+Dataset: dataset1 | Val: 800
+Generated: 2026-05-16 23:46
+
+              precision    recall  f1-score   support
+
+  belly_pain     0.7692    0.6250    0.6897       160
+     burping     0.8873    0.7875    0.8344       160
+  discomfort     0.9295    0.9062    0.9177       160
+      hungry     0.6938    0.9062    0.7859       160
+       tired     0.8466    0.8625    0.8545       160
+
+    accuracy                         0.8175       800
+   macro avg     0.8253    0.8175    0.8164       800
+weighted avg     0.8253    0.8175    0.8164       800

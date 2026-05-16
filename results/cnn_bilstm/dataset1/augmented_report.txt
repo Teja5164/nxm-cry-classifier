@@ -1,0 +1,15 @@
+Model: CNN+BiLSTM*  (augmented + T=0.9370)
+Dataset: dataset1 | Val: 800
+Generated: 2026-05-16 23:46
+
+              precision    recall  f1-score   support
+
+  belly_pain     0.7542    0.5563    0.6403       160
+     burping     0.8992    0.7250    0.8028       160
+  discomfort     0.8957    0.9125    0.9040       160
+      hungry     0.7500    0.8438    0.7941       160
+       tired     0.7190    0.9437    0.8162       160
+
+    accuracy                         0.7963       800
+   macro avg     0.8036    0.7963    0.7915       800
+weighted avg     0.8036    0.7963    0.7915       800

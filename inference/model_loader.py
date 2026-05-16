@@ -330,14 +330,20 @@ def load_models(
     dataset: str,
     device=None,
     model_root: Optional[str] = None,
+    prefer_augmented: bool = True,
 ) -> List[ModelEntry]:
     """
     Load all available trained checkpoints for a given dataset.
 
+    When prefer_augmented=True (default), automatically uses augmented models
+    (models/*/dataset1_augmented/) if they exist and have equal/better val_acc
+    than the original models. Falls back to originals if augmented not found.
+
     Args:
-        dataset:    'dataset1' or 'dataset2'.
-        device:     torch.device or None (auto-detect GPU → CPU).
-        model_root: Override for models/ directory path.
+        dataset:          'dataset1' or 'dataset2'.
+        device:           torch.device or None (auto-detect GPU → CPU).
+        model_root:       Override for models/ directory path.
+        prefer_augmented: If True, prefer augmented checkpoints when available.
 
     Returns:
         List of ModelEntry(model, name, val_acc) — only successfully loaded models.
@@ -352,8 +358,20 @@ def load_models(
     entries = []
 
     for cls, folder, name, kwargs in _MODEL_REGISTRY:
-        ckpt = os.path.join(root, folder, dataset, 'best_model.pth')
-        entry = _load_single(cls, ckpt, name, device, **kwargs)
+        entry = None
+
+        # Try augmented checkpoint first (if applicable for dataset1)
+        if prefer_augmented and dataset == 'dataset1':
+            aug_ckpt = os.path.join(root, folder, 'dataset1_augmented', 'best_model.pth')
+            aug_entry = _load_single(cls, aug_ckpt, f"{name}*", device, **kwargs)
+            if aug_entry is not None:
+                entry = aug_entry
+
+        # Fall back to standard checkpoint
+        if entry is None:
+            std_ckpt = os.path.join(root, folder, dataset, 'best_model.pth')
+            entry = _load_single(cls, std_ckpt, name, device, **kwargs)
+
         if entry is not None:
             entries.append(entry)
 
@@ -362,5 +380,9 @@ def load_models(
             f"No trained models found for dataset='{dataset}' under: {root}\n"
             "Run training pipeline (stages 2–5) first."
         )
+
+    aug_count = sum(1 for e in entries if e.name.endswith('*'))
+    if aug_count > 0:
+        print(f"  [ModelLoader] {aug_count}/{len(entries)} augmented models loaded (marked with *)")
 
     return entries

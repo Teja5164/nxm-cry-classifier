@@ -1,4 +1,4 @@
-name: cry_mlpipeline
+name: babycare_env
 channels:
   - pytorch
   - nvidia
@@ -6,32 +6,42 @@ channels:
   - defaults
 
 dependencies:
-  - python=3.13.5
+  - python=3.10
   - pip
 
   # ── Conda packages ──────────────────────────────────────────
-  - numpy=2.1.3
-  - scipy=1.15.3
-  - scikit-learn=1.6.1
-  - matplotlib=3.10.0
-  - seaborn=0.13.2
-  - pandas=2.2.3
-  - tqdm=4.67.1
+  - numpy
+  - scipy
+  - scikit-learn
+  - matplotlib
+  - seaborn
+  - pandas
+  - tqdm
 
-  # ── Pip packages (PyTorch CUDA + audio) ─────────────────────
+  # ── Pip packages (PyTorch + audio + API) ────────────────────
   - pip:
-    - torch==2.6.0+cu124 --index-url https://download.pytorch.org/whl/cu124
-    - librosa==0.11.0
-    - soundfile==0.13.1
+    # CPU build (works everywhere). For GPU with CUDA 12.4, replace with:
+    # torch==2.6.0+cu124 --index-url https://download.pytorch.org/whl/cu124
+    - torch
+    - librosa
+    - soundfile
+    - transformers
+    - gdown
+    - requests
+    - fastapi
+    - "uvicorn[standard]"
+    - python-multipart
+    - scipy
+    - scikit-learn
 
 # ============================================================
 # Usage:
 #   conda env create -f environment.yml
-#   conda activate cry_mlpipeline
+#   conda activate babycare_env
+#
+# For GPU (CUDA 12.4), after creating the env run:
+#   pip install torch==2.6.0+cu124 --index-url https://download.pytorch.org/whl/cu124
 #
 # Update existing env:
 #   conda env update -f environment.yml --prune
-#
-# Export current env:
-#   conda env export > environment.yml
 # ============================================================

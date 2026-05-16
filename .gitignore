@@ -22,6 +22,9 @@ datasets/Dataset2/
 datasets/raw_cry/
 datasets/preprocessed/
 
+# ── ESC-50 environmental sounds dataset (used for binary gate training) ───────
+datasets/ESC50/
+
 # ── CLAP model (downloaded separately) ────────────────────────
 preprocessing/clap_model/
 

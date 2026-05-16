@@ -1,0 +1,15 @@
+Model: SE-ResNet*  (augmented + T=1.0368)
+Dataset: dataset1 | Val: 800
+Generated: 2026-05-16 23:46
+
+              precision    recall  f1-score   support
+
+  belly_pain     0.8255    0.7688    0.7961       160
+     burping     0.9104    0.7625    0.8299       160
+  discomfort     0.9608    0.9187    0.9393       160
+      hungry     0.8035    0.8688    0.8348       160
+       tired     0.7958    0.9500    0.8661       160
+
+    accuracy                         0.8538       800
+   macro avg     0.8592    0.8538    0.8533       800
+weighted avg     0.8592    0.8538    0.8533       800
