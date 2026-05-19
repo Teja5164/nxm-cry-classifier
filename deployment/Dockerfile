@@ -18,16 +18,29 @@ RUN apt-get update && apt-get install -y \
 
 WORKDIR /app
 
-# Step 1: Install PyTorch CPU-only separately (uses PyTorch index, smaller wheel)
-# Own layer so other packages are cached independently of torch
-RUN pip install --no-cache-dir --timeout 600 --retries 5 \
-    torch --index-url https://download.pytorch.org/whl/cpu
+# Step 1: Install PyTorch CPU-only (uses smaller CPU-only wheel ~175MB vs 532MB from PyPI)
+# Shell retry loop handles hash failures caused by corrupted partial downloads on slow networks
+RUN for i in 1 2 3 4 5; do \
+      pip install --no-cache-dir --timeout 600 \
+        torch --index-url https://download.pytorch.org/whl/cpu \
+      && break || (echo "torch install attempt $i failed, retrying..."; sleep 10); \
+    done
 
-# Step 2: Install remaining API dependencies (smaller packages, faster download)
-RUN pip install --no-cache-dir --timeout 300 --retries 5 \
-    "librosa==0.11.0" "soundfile==0.13.1" numpy "scipy==1.15.3" \
-    "scikit-learn==1.6.1" "fastapi==0.115.12" "uvicorn[standard]==0.34.0" \
-    "python-multipart==0.0.20"
+# Step 2: Install remaining API dependencies with retry loop
+# (pip --retries only handles connection errors, not hash failures from corrupted downloads;
+#  this shell loop retries the entire install on any failure)
+RUN pip_install() { \
+      for i in 1 2 3 4 5; do \
+        pip install --no-cache-dir --timeout 600 "$@" && return 0; \
+        echo "pip attempt $i failed, retrying in 10s..."; sleep 10; \
+      done; return 1; \
+    }; \
+    pip_install "numpy==2.2.6" && \
+    pip_install "scipy==1.15.3" && \
+    pip_install "scikit-learn==1.6.1" && \
+    pip_install "soundfile==0.13.1" && \
+    pip_install "librosa==0.11.0" && \
+    pip_install "fastapi==0.115.12" "uvicorn[standard]==0.34.0" "python-multipart==0.0.20"
 
 COPY configs/    ./configs/
 COPY inference/  ./inference/
