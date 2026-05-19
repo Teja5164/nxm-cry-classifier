@@ -2,13 +2,15 @@ version: "3.9"
 
 services:
   cry-classifier:
-    build: ..
+    build:
+      context: ..                          # build context = project root (ML_pipeline/)
+      dockerfile: deployment/Dockerfile    # Dockerfile location relative to context
     ports:
       - "8000:8000"
     environment:
       - KMP_DUPLICATE_LIB_OK=TRUE
     volumes:
-      # Mount model weights (excluded from Docker image)
+      # Mount model weights (excluded from Docker image -- too large)
       - ../models:/app/models:ro
       # Mount norm_stats and features
       - ../training/features:/app/training/features:ro
@@ -22,7 +24,8 @@ services:
     #           capabilities: [gpu]
     restart: unless-stopped
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8000/"]
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
       interval: 30s
       timeout: 10s
       retries: 3
+      start_period: 15s

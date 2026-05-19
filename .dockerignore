@@ -1,0 +1,53 @@
+# .dockerignore — exclude large/unnecessary files from Docker build context
+# This keeps the build context small (fast transfer to Docker daemon)
+
+# Training datasets and pre-computed features (mount as volumes instead)
+training/features/
+training/data/
+
+# Model checkpoints (mount as volumes instead)
+models/
+
+# Results and reports
+results/
+
+# Notebooks
+*.ipynb
+
+# Python cache
+__pycache__/
+**/__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# Git
+.git/
+.gitignore
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+
+# Logs
+*.log
+logs/
+
+# Test files
+tests/
+
+# Training scripts (not needed at inference time)
+training/scripts/
+
+# Session files
+*.tmp

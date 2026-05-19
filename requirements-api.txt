@@ -1,0 +1,21 @@
+# requirements-api.txt — PRODUCTION API ONLY (used by Docker)
+# Contains only what the FastAPI inference server needs at runtime.
+# Training/research packages (transformers, gdown, matplotlib, etc.) are excluded.
+# ─────────────────────────────────────────────────────────────────────────────
+
+# Core ML
+torch --index-url https://download.pytorch.org/whl/cpu
+
+# Audio processing
+librosa==0.11.0
+soundfile==0.13.1
+
+# Numerics
+numpy
+scipy==1.15.3
+scikit-learn==1.6.1
+
+# API server
+fastapi==0.115.12
+uvicorn[standard]==0.34.0
+python-multipart==0.0.20
