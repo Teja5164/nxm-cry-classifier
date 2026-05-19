@@ -18,10 +18,16 @@ RUN apt-get update && apt-get install -y \
 
 WORKDIR /app
 
-# Copy only the API requirements (no training packages like transformers/gdown)
-COPY requirements-api.txt .
-# Extended timeout for large packages (torch CPU wheel is ~250MB)
-RUN pip install --no-cache-dir --timeout 600 --retries 5 -r requirements-api.txt
+# Step 1: Install PyTorch CPU-only separately (uses PyTorch index, smaller wheel)
+# Own layer so other packages are cached independently of torch
+RUN pip install --no-cache-dir --timeout 600 --retries 5 \
+    torch --index-url https://download.pytorch.org/whl/cpu
+
+# Step 2: Install remaining API dependencies (smaller packages, faster download)
+RUN pip install --no-cache-dir --timeout 300 --retries 5 \
+    "librosa==0.11.0" "soundfile==0.13.1" numpy "scipy==1.15.3" \
+    "scikit-learn==1.6.1" "fastapi==0.115.12" "uvicorn[standard]==0.34.0" \
+    "python-multipart==0.0.20"
 
 COPY configs/    ./configs/
 COPY inference/  ./inference/
